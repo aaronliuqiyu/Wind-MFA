@@ -3,6 +3,8 @@
 import pandas as pd
 import numpy as np
 import os
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Import ODYM dynamic stock model #
 # This package is used to carry out the MFA calculations #
@@ -73,207 +75,248 @@ MI_off.index = ['Concrete', 'Steel', 'Copper', 'Aluminium', 'Fiber Glass', 'Neod
 
 # stock driven #
 from helper import stock_driven
-sf_on_capacity_expansion, sf_on_outflow, sf_on_inflow = stock_driven(sf_capacity_on,lifetime)
-sf_off_capacity_expansion, sf_off_outflow, sf_off_inflow = stock_driven(sf_capacity_off,lifetime)
-fm_on_capacity_expansion, fm_on_outflow, fm_on_inflow = stock_driven(fm_capacity_on,lifetime)
-fm_off_capacity_expansion, fm_off_outflow, fm_off_inflow = stock_driven(fm_capacity_off,lifetime)
-ep_on_capacity_expansion, ep_on_outflow, ep_on_inflow = stock_driven(ep_capacity_on,lifetime)
-ep_off_capacity_expansion, ep_off_outflow, ep_off_inflow = stock_driven(ep_capacity_off,lifetime)
+sf_on_outflow, sf_on_inflow = stock_driven(sf_capacity_on,lifetime)
+sf_off_outflow, sf_off_inflow = stock_driven(sf_capacity_off,lifetime)
+fm_on_outflow, fm_on_inflow = stock_driven(fm_capacity_on,lifetime)
+fm_off_outflow, fm_off_inflow = stock_driven(fm_capacity_off,lifetime)
+ep_on_outflow, ep_on_inflow = stock_driven(ep_capacity_on,lifetime)
+ep_off_outflow, ep_off_inflow = stock_driven(ep_capacity_off,lifetime)
 
 # inflow materials #
 # Ugly code I know :(, will think about a better way to do it# # TO DO #
 # I tried a more elegant way to do this but it broke my code :( , so leaving it like this for now #
-sf_on_inflow_concrete = MI_on.iloc[0].values * sf_on_inflow.values.flatten()
-sf_on_inflow_steel = MI_on.iloc[1].values * sf_on_inflow.values.flatten()
-sf_on_inflow_copper = MI_on.iloc[2].values * sf_on_inflow.values.flatten()
-sf_on_inflow_aluminium = MI_on.iloc[3].values * sf_on_inflow.values.flatten()
-sf_on_inflow_fiberglass = MI_on.iloc[4].values * sf_on_inflow.values.flatten()
-sf_on_inflow_neodymium = MI_on.iloc[5].values * sf_on_inflow.values.flatten()
-sf_on_inflow_dysprosium = MI_on.iloc[6].values * sf_on_inflow.values.flatten()
+sf_on_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_on_inflow.values.flatten())
+sf_on_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * sf_on_inflow.values.flatten())
+sf_on_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * sf_on_inflow.values.flatten())
+sf_on_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_on_inflow.values.flatten())
+sf_on_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_on_inflow.values.flatten())
+sf_on_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_on_inflow.values.flatten())
+sf_on_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_on_inflow.values.flatten())
 
-sf_off_inflow_concrete = MI_on.iloc[0].values * sf_off_inflow.values.flatten()
-sf_off_inflow_steel = MI_on.iloc[1].values * sf_off_inflow.values.flatten()
-sf_off_inflow_copper = MI_on.iloc[2].values * sf_off_inflow.values.flatten()
-sf_off_inflow_aluminium = MI_on.iloc[3].values * sf_off_inflow.values.flatten()
-sf_off_inflow_fiberglass = MI_on.iloc[4].values * sf_off_inflow.values.flatten()
-sf_off_inflow_neodymium = MI_on.iloc[5].values * sf_off_inflow.values.flatten()
-sf_off_inflow_dysprosium = MI_on.iloc[6].values * sf_off_inflow.values.flatten()
+sf_off_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_off_inflow.values.flatten())
+sf_off_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * sf_off_inflow.values.flatten())
+sf_off_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * sf_off_inflow.values.flatten())
+sf_off_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_off_inflow.values.flatten())
+sf_off_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_off_inflow.values.flatten())
+sf_off_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_off_inflow.values.flatten())
+sf_off_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_off_inflow.values.flatten())
 
-fm_on_inflow_concrete = MI_on.iloc[0].values * fm_on_inflow.values.flatten()
-fm_on_inflow_steel = MI_on.iloc[1].values * fm_on_inflow.values.flatten()
-fm_on_inflow_copper = MI_on.iloc[2].values * fm_on_inflow.values.flatten()
-fm_on_inflow_aluminium = MI_on.iloc[3].values * fm_on_inflow.values.flatten()
-fm_on_inflow_fiberglass = MI_on.iloc[4].values * fm_on_inflow.values.flatten()
-fm_on_inflow_neodymium = MI_on.iloc[5].values * fm_on_inflow.values.flatten()
-fm_on_inflow_dysprosium = MI_on.iloc[6].values * fm_on_inflow.values.flatten()
+fm_on_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_on_inflow.values.flatten())
+fm_on_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * fm_on_inflow.values.flatten())
+fm_on_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * fm_on_inflow.values.flatten())
+fm_on_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_on_inflow.values.flatten())
+fm_on_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_on_inflow.values.flatten())
+fm_on_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_on_inflow.values.flatten())
+fm_on_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_on_inflow.values.flatten())
 
-fm_off_inflow_concrete = MI_on.iloc[0].values * fm_off_inflow.values.flatten()
-fm_off_inflow_steel = MI_on.iloc[1].values * fm_off_inflow.values.flatten()
-fm_off_inflow_copper = MI_on.iloc[2].values * fm_off_inflow.values.flatten()
-fm_off_inflow_aluminium = MI_on.iloc[3].values * fm_off_inflow.values.flatten()
-fm_off_inflow_fiberglass = MI_on.iloc[4].values * fm_off_inflow.values.flatten()
-fm_off_inflow_neodymium = MI_on.iloc[5].values * fm_off_inflow.values.flatten()
-fm_off_inflow_dysprosium = MI_on.iloc[6].values * fm_off_inflow.values.flatten()
+fm_off_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_off_inflow.values.flatten())
+fm_off_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * fm_off_inflow.values.flatten())
+fm_off_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * fm_off_inflow.values.flatten())
+fm_off_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_off_inflow.values.flatten())
+fm_off_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_off_inflow.values.flatten())
+fm_off_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_off_inflow.values.flatten())
+fm_off_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_off_inflow.values.flatten())
 
-ep_on_inflow_concrete = MI_on.iloc[0].values * ep_on_inflow.values.flatten()
-ep_on_inflow_steel = MI_on.iloc[1].values * ep_on_inflow.values.flatten()
-ep_on_inflow_copper = MI_on.iloc[2].values * ep_on_inflow.values.flatten()
-ep_on_inflow_aluminium = MI_on.iloc[3].values * ep_on_inflow.values.flatten()
-ep_on_inflow_fiberglass = MI_on.iloc[4].values * ep_on_inflow.values.flatten()
-ep_on_inflow_neodymium = MI_on.iloc[5].values * ep_on_inflow.values.flatten()
-ep_on_inflow_dysprosium = MI_on.iloc[6].values * ep_on_inflow.values.flatten()
+ep_on_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_on_inflow.values.flatten())
+ep_on_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * ep_on_inflow.values.flatten())
+ep_on_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * ep_on_inflow.values.flatten())
+ep_on_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_on_inflow.values.flatten())
+ep_on_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_on_inflow.values.flatten())
+ep_on_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_on_inflow.values.flatten())
+ep_on_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_on_inflow.values.flatten())
 
-ep_off_inflow_concrete = MI_on.iloc[0].values * ep_off_inflow.values.flatten()
-ep_off_inflow_steel = MI_on.iloc[1].values * ep_off_inflow.values.flatten()
-ep_off_inflow_copper = MI_on.iloc[2].values * ep_off_inflow.values.flatten()
-ep_off_inflow_aluminium = MI_on.iloc[3].values * ep_off_inflow.values.flatten()
-ep_off_inflow_fiberglass = MI_on.iloc[4].values * ep_off_inflow.values.flatten()
-ep_off_inflow_neodymium = MI_on.iloc[5].values * ep_off_inflow.values.flatten()
-ep_off_inflow_dysprosium = MI_on.iloc[6].values * ep_off_inflow.values.flatten()
+ep_off_inflow_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_off_inflow.values.flatten())
+ep_off_inflow_steel = pd.DataFrame(MI_on.iloc[1].values * ep_off_inflow.values.flatten())
+ep_off_inflow_copper = pd.DataFrame(MI_on.iloc[2].values * ep_off_inflow.values.flatten())
+ep_off_inflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_off_inflow.values.flatten())
+ep_off_inflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_off_inflow.values.flatten())
+ep_off_inflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_off_inflow.values.flatten())
+ep_off_inflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_off_inflow.values.flatten())
 
 # Outflows #
-sf_on_outflow_concrete = MI_on.iloc[0].values * sf_on_outflow.values.flatten()
-sf_on_outflow_steel = MI_on.iloc[1].values * sf_on_outflow.values.flatten()
-sf_on_outflow_copper = MI_on.iloc[2].values * sf_on_outflow.values.flatten()
-sf_on_outflow_aluminium = MI_on.iloc[3].values * sf_on_outflow.values.flatten()
-sf_on_outflow_fiberglass = MI_on.iloc[4].values * sf_on_outflow.values.flatten()
-sf_on_outflow_neodymium = MI_on.iloc[5].values * sf_on_outflow.values.flatten()
-sf_on_outflow_dysprosium = MI_on.iloc[6].values * sf_on_outflow.values.flatten()
+sf_on_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_on_outflow.values.flatten())
+sf_on_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * sf_on_outflow.values.flatten())
+sf_on_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * sf_on_outflow.values.flatten())
+sf_on_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_on_outflow.values.flatten())
+sf_on_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_on_outflow.values.flatten())
+sf_on_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_on_outflow.values.flatten())
+sf_on_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_on_outflow.values.flatten())
 
-sf_off_outflow_concrete = MI_on.iloc[0].values * sf_off_outflow.values.flatten()
-sf_off_outflow_steel = MI_on.iloc[1].values * sf_off_outflow.values.flatten()
-sf_off_outflow_copper = MI_on.iloc[2].values * sf_off_outflow.values.flatten()
-sf_off_outflow_aluminium = MI_on.iloc[3].values * sf_off_outflow.values.flatten()
-sf_off_outflow_fiberglass = MI_on.iloc[4].values * sf_off_outflow.values.flatten()
-sf_off_outflow_neodymium = MI_on.iloc[5].values * sf_off_outflow.values.flatten()
-sf_off_outflow_dysprosium = MI_on.iloc[6].values * sf_off_outflow.values.flatten()
+sf_off_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_off_outflow.values.flatten())
+sf_off_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * sf_off_outflow.values.flatten())
+sf_off_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * sf_off_outflow.values.flatten())
+sf_off_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_off_outflow.values.flatten())
+sf_off_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_off_outflow.values.flatten())
+sf_off_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_off_outflow.values.flatten())
+sf_off_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_off_outflow.values.flatten())
 
-fm_on_outflow_concrete = MI_on.iloc[0].values * fm_on_outflow.values.flatten()
-fm_on_outflow_steel = MI_on.iloc[1].values * fm_on_outflow.values.flatten()
-fm_on_outflow_copper = MI_on.iloc[2].values * fm_on_outflow.values.flatten()
-fm_on_outflow_aluminium = MI_on.iloc[3].values * fm_on_outflow.values.flatten()
-fm_on_outflow_fiberglass = MI_on.iloc[4].values * fm_on_outflow.values.flatten()
-fm_on_outflow_neodymium = MI_on.iloc[5].values * fm_on_outflow.values.flatten()
-fm_on_outflow_dysprosium = MI_on.iloc[6].values * fm_on_outflow.values.flatten()
+fm_on_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_on_outflow.values.flatten())
+fm_on_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * fm_on_outflow.values.flatten())
+fm_on_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * fm_on_outflow.values.flatten())
+fm_on_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_on_outflow.values.flatten())
+fm_on_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_on_outflow.values.flatten())
+fm_on_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_on_outflow.values.flatten())
+fm_on_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_on_outflow.values.flatten())
 
-fm_off_outflow_concrete = MI_on.iloc[0].values * fm_off_outflow.values.flatten()
-fm_off_outflow_steel = MI_on.iloc[1].values * fm_off_outflow.values.flatten()
-fm_off_outflow_copper = MI_on.iloc[2].values * fm_off_outflow.values.flatten()
-fm_off_outflow_aluminium = MI_on.iloc[3].values * fm_off_outflow.values.flatten()
-fm_off_outflow_fiberglass = MI_on.iloc[4].values * fm_off_outflow.values.flatten()
-fm_off_outflow_neodymium = MI_on.iloc[5].values * fm_off_outflow.values.flatten()
-fm_off_outflow_dysprosium = MI_on.iloc[6].values * fm_off_outflow.values.flatten()
+fm_off_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_off_outflow.values.flatten())
+fm_off_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * fm_off_outflow.values.flatten())
+fm_off_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * fm_off_outflow.values.flatten())
+fm_off_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_off_outflow.values.flatten())
+fm_off_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_off_outflow.values.flatten())
+fm_off_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_off_outflow.values.flatten())
+fm_off_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_off_outflow.values.flatten())
 
-ep_on_outflow_concrete = MI_on.iloc[0].values * ep_on_outflow.values.flatten()
-ep_on_outflow_steel = MI_on.iloc[1].values * ep_on_outflow.values.flatten()
-ep_on_outflow_copper = MI_on.iloc[2].values * ep_on_outflow.values.flatten()
-ep_on_outflow_aluminium = MI_on.iloc[3].values * ep_on_outflow.values.flatten()
-ep_on_outflow_fiberglass = MI_on.iloc[4].values * ep_on_outflow.values.flatten()
-ep_on_outflow_neodymium = MI_on.iloc[5].values * ep_on_outflow.values.flatten()
-ep_on_outflow_dysprosium = MI_on.iloc[6].values * ep_on_outflow.values.flatten()
+ep_on_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_on_outflow.values.flatten())
+ep_on_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * ep_on_outflow.values.flatten())
+ep_on_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * ep_on_outflow.values.flatten())
+ep_on_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_on_outflow.values.flatten())
+ep_on_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_on_outflow.values.flatten())
+ep_on_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_on_outflow.values.flatten())
+ep_on_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_on_outflow.values.flatten())
 
-ep_off_outflow_concrete = MI_on.iloc[0].values * ep_off_outflow.values.flatten()
-ep_off_outflow_steel = MI_on.iloc[1].values * ep_off_outflow.values.flatten()
-ep_off_outflow_copper = MI_on.iloc[2].values * ep_off_outflow.values.flatten()
-ep_off_outflow_aluminium = MI_on.iloc[3].values * ep_off_outflow.values.flatten()
-ep_off_outflow_fiberglass = MI_on.iloc[4].values * ep_off_outflow.values.flatten()
-ep_off_outflow_neodymium = MI_on.iloc[5].values * ep_off_outflow.values.flatten()
-ep_off_outflow_dysprosium = MI_on.iloc[6].values * ep_off_outflow.values.flatten()
+ep_off_outflow_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_off_outflow.values.flatten())
+ep_off_outflow_steel = pd.DataFrame(MI_on.iloc[1].values * ep_off_outflow.values.flatten())
+ep_off_outflow_copper = pd.DataFrame(MI_on.iloc[2].values * ep_off_outflow.values.flatten())
+ep_off_outflow_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_off_outflow.values.flatten())
+ep_off_outflow_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_off_outflow.values.flatten())
+ep_off_outflow_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_off_outflow.values.flatten())
+ep_off_outflow_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_off_outflow.values.flatten())
+
+# Calculate expansion #
+sf_on_capacity_expansion = sf_capacity_on.diff()
+sf_off_capacity_expansion = sf_capacity_off.diff()
+fm_on_capacity_expansion = fm_capacity_on.diff()
+fm_off_capacity_expansion = fm_capacity_off.diff()
+ep_on_capacity_expansion = ep_capacity_on.diff()
+ep_off_capacity_expansion = ep_capacity_off.diff()
+
+print(sf_on_capacity_expansion)
 
 # Expansion calculated by ODYM #
-sf_on_expansion_concrete = MI_on.iloc[0].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_steel = MI_on.iloc[1].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_copper = MI_on.iloc[2].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_aluminium = MI_on.iloc[3].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_fiberglass = MI_on.iloc[4].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_neodymium = MI_on.iloc[5].values * sf_on_capacity_expansion.values.flatten()
-sf_on_expansion_dysprosium = MI_on.iloc[6].values * sf_on_capacity_expansion.values.flatten()
+sf_on_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_on_capacity_expansion.values.flatten())
+sf_on_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_on_capacity_expansion.values.flatten())
 
-sf_off_expansion_concrete = MI_on.iloc[0].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_steel = MI_on.iloc[1].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_copper = MI_on.iloc[2].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_aluminium = MI_on.iloc[3].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_fiberglass = MI_on.iloc[4].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_neodymium = MI_on.iloc[5].values * sf_off_capacity_expansion.values.flatten()
-sf_off_expansion_dysprosium = MI_on.iloc[6].values * sf_off_capacity_expansion.values.flatten()
+sf_off_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * sf_off_capacity_expansion.values.flatten())
+sf_off_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * sf_off_capacity_expansion.values.flatten())
 
-fm_on_expansion_concrete = MI_on.iloc[0].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_steel = MI_on.iloc[1].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_copper = MI_on.iloc[2].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_aluminium = MI_on.iloc[3].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_fiberglass = MI_on.iloc[4].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_neodymium = MI_on.iloc[5].values * fm_on_capacity_expansion.values.flatten()
-fm_on_expansion_dysprosium = MI_on.iloc[6].values * fm_on_capacity_expansion.values.flatten()
+fm_on_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_on_capacity_expansion.values.flatten())
+fm_on_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_on_capacity_expansion.values.flatten())
 
-fm_off_expansion_concrete = MI_on.iloc[0].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_steel = MI_on.iloc[1].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_copper = MI_on.iloc[2].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_aluminium = MI_on.iloc[3].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_fiberglass = MI_on.iloc[4].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_neodymium = MI_on.iloc[5].values * fm_off_capacity_expansion.values.flatten()
-fm_off_expansion_dysprosium = MI_on.iloc[6].values * fm_off_capacity_expansion.values.flatten()
+fm_off_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * fm_off_capacity_expansion.values.flatten())
+fm_off_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * fm_off_capacity_expansion.values.flatten())
 
-ep_on_expansion_concrete = MI_on.iloc[0].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_steel = MI_on.iloc[1].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_copper = MI_on.iloc[2].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_aluminium = MI_on.iloc[3].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_fiberglass = MI_on.iloc[4].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_neodymium = MI_on.iloc[5].values * ep_on_capacity_expansion.values.flatten()
-ep_on_expansion_dysprosium = MI_on.iloc[6].values * ep_on_capacity_expansion.values.flatten()
+ep_on_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_on_capacity_expansion.values.flatten())
+ep_on_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_on_capacity_expansion.values.flatten())
 
-ep_off_expansion_concrete = MI_on.iloc[0].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_steel = MI_on.iloc[1].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_copper = MI_on.iloc[2].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_aluminium = MI_on.iloc[3].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_fiberglass = MI_on.iloc[4].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_neodymium = MI_on.iloc[5].values * ep_off_capacity_expansion.values.flatten()
-ep_off_expansion_dysprosium = MI_on.iloc[6].values * ep_off_capacity_expansion.values.flatten()
+ep_off_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_copper = pd.DataFrame(MI_on.iloc[2].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_aluminium = pd.DataFrame(MI_on.iloc[3].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_fiberglass = pd.DataFrame(MI_on.iloc[4].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_neodymium = pd.DataFrame(MI_on.iloc[5].values * ep_off_capacity_expansion.values.flatten())
+ep_off_expansion_dysprosium = pd.DataFrame(MI_on.iloc[6].values * ep_off_capacity_expansion.values.flatten())
 
-# Repalcement #
-sf_on_repalcement_concrete = sf_on_inflow_concrete - sf_on_expansion_concrete
-sf_on_repalcement_steel = sf_on_inflow_steel - sf_on_expansion_steel
-sf_on_repalcement_copper = sf_on_inflow_copper - sf_on_expansion_copper
-sf_on_repalcement_aluminium = sf_on_inflow_aluminium - sf_on_expansion_aluminium
-sf_on_repalcement_fiberglass = sf_on_inflow_fiberglass - sf_on_expansion_fiberglass
-sf_on_repalcement_neodymium = sf_on_inflow_neodymium - sf_on_expansion_neodymium
-sf_on_repalcement_dysprosium = sf_on_inflow_dysprosium - sf_on_expansion_dysprosium
+# replacement #
+sf_on_replacement_concrete = pd.DataFrame(sf_on_inflow_concrete - sf_on_expansion_concrete)
+sf_on_replacement_steel = pd.DataFrame(sf_on_inflow_steel - sf_on_expansion_steel)
+sf_on_replacement_copper = pd.DataFrame(sf_on_inflow_copper - sf_on_expansion_copper)
+sf_on_replacement_aluminium = pd.DataFrame(sf_on_inflow_aluminium - sf_on_expansion_aluminium)
+sf_on_replacement_fiberglass = pd.DataFrame(sf_on_inflow_fiberglass - sf_on_expansion_fiberglass)
+sf_on_replacement_neodymium = pd.DataFrame(sf_on_inflow_neodymium - sf_on_expansion_neodymium)
+sf_on_replacement_dysprosium = pd.DataFrame(sf_on_inflow_dysprosium - sf_on_expansion_dysprosium)
 
-sf_off_repalcement_concrete = sf_off_inflow_concrete - sf_off_expansion_concrete
-sf_off_repalcement_steel = sf_off_inflow_steel - sf_off_expansion_steel
-sf_off_repalcement_copper = sf_off_inflow_copper - sf_off_expansion_copper
-sf_off_repalcement_aluminium = sf_off_inflow_aluminium - sf_off_expansion_aluminium
-sf_off_repalcement_fiberglass = sf_off_inflow_fiberglass - sf_off_expansion_fiberglass
-sf_off_repalcement_neodymium = sf_off_inflow_neodymium - sf_off_expansion_neodymium
-sf_off_repalcement_dysprosium = sf_off_inflow_dysprosium - sf_off_expansion_dysprosium
+sf_off_replacement_concrete = pd.DataFrame(sf_off_inflow_concrete - sf_off_expansion_concrete)
+sf_off_replacement_steel = pd.DataFrame(sf_off_inflow_steel - sf_off_expansion_steel)
+sf_off_replacement_copper = pd.DataFrame(sf_off_inflow_copper - sf_off_expansion_copper)
+sf_off_replacement_aluminium = pd.DataFrame(sf_off_inflow_aluminium - sf_off_expansion_aluminium)
+sf_off_replacement_fiberglass = pd.DataFrame(sf_off_inflow_fiberglass - sf_off_expansion_fiberglass)
+sf_off_replacement_neodymium = pd.DataFrame(sf_off_inflow_neodymium - sf_off_expansion_neodymium)
+sf_off_replacement_dysprosium = pd.DataFrame(sf_off_inflow_dysprosium - sf_off_expansion_dysprosium)
 
-fm_on_repalcement_concrete = fm_on_inflow_concrete - fm_on_expansion_concrete
-fm_on_repalcement_steel = fm_on_inflow_steel - fm_on_expansion_steel
-fm_on_repalcement_copper = fm_on_inflow_copper - fm_on_expansion_copper
-fm_on_repalcement_aluminium = fm_on_inflow_aluminium - fm_on_expansion_aluminium
-fm_on_repalcement_fiberglass = fm_on_inflow_fiberglass - fm_on_expansion_fiberglass
-fm_on_repalcement_neodymium = fm_on_inflow_neodymium - fm_on_expansion_neodymium
-fm_on_repalcement_dysprosium = fm_on_inflow_dysprosium - fm_on_expansion_dysprosium
+fm_on_replacement_concrete = pd.DataFrame(fm_on_inflow_concrete - fm_on_expansion_concrete)
+fm_on_replacement_steel = pd.DataFrame(fm_on_inflow_steel - fm_on_expansion_steel)
+fm_on_replacement_copper = pd.DataFrame(fm_on_inflow_copper - fm_on_expansion_copper)
+fm_on_replacement_aluminium = pd.DataFrame(fm_on_inflow_aluminium - fm_on_expansion_aluminium)
+fm_on_replacement_fiberglass = pd.DataFrame(fm_on_inflow_fiberglass - fm_on_expansion_fiberglass)
+fm_on_replacement_neodymium = pd.DataFrame(fm_on_inflow_neodymium - fm_on_expansion_neodymium)
+fm_on_replacement_dysprosium = pd.DataFrame(fm_on_inflow_dysprosium - fm_on_expansion_dysprosium)
 
-fm_off_repalcement_concrete = fm_off_inflow_concrete - fm_off_expansion_concrete
-fm_off_repalcement_steel = fm_off_inflow_steel - fm_off_expansion_steel
-fm_off_repalcement_copper = fm_off_inflow_copper - fm_off_expansion_copper
-fm_off_repalcement_aluminium = fm_off_inflow_aluminium - fm_off_expansion_aluminium
-fm_off_repalcement_fiberglass = fm_off_inflow_fiberglass - fm_off_expansion_fiberglass
-fm_off_repalcement_neodymium = fm_off_inflow_neodymium - fm_off_expansion_neodymium
-fm_off_repalcement_dysprosium = fm_off_inflow_dysprosium - fm_off_expansion_dysprosium
+fm_off_replacement_concrete = pd.DataFrame(fm_off_inflow_concrete - fm_off_expansion_concrete)
+fm_off_replacement_steel = pd.DataFrame(fm_off_inflow_steel - fm_off_expansion_steel)
+fm_off_replacement_copper = pd.DataFrame(fm_off_inflow_copper - fm_off_expansion_copper)
+fm_off_replacement_aluminium = pd.DataFrame(fm_off_inflow_aluminium - fm_off_expansion_aluminium)
+fm_off_replacement_fiberglass = pd.DataFrame(fm_off_inflow_fiberglass - fm_off_expansion_fiberglass)
+fm_off_replacement_neodymium = pd.DataFrame(fm_off_inflow_neodymium - fm_off_expansion_neodymium)
+fm_off_replacement_dysprosium = pd.DataFrame(fm_off_inflow_dysprosium - fm_off_expansion_dysprosium)
 
-ep_on_repalcement_concrete = ep_on_inflow_concrete - ep_on_expansion_concrete
-ep_on_repalcement_steel = ep_on_inflow_steel - ep_on_expansion_steel
-ep_on_repalcement_copper = ep_on_inflow_copper - ep_on_expansion_copper
-ep_on_repalcement_aluminium = ep_on_inflow_aluminium - ep_on_expansion_aluminium
-ep_on_repalcement_fiberglass = ep_on_inflow_fiberglass - ep_on_expansion_fiberglass
-ep_on_repalcement_neodymium = ep_on_inflow_neodymium - ep_on_expansion_neodymium
-ep_on_repalcement_dysprosium = ep_on_inflow_dysprosium - ep_on_expansion_dysprosium
+ep_on_replacement_concrete = pd.DataFrame(ep_on_inflow_concrete - ep_on_expansion_concrete)
+ep_on_replacement_steel = pd.DataFrame(ep_on_inflow_steel - ep_on_expansion_steel)
+ep_on_replacement_copper = pd.DataFrame(ep_on_inflow_copper - ep_on_expansion_copper)
+ep_on_replacement_aluminium = pd.DataFrame(ep_on_inflow_aluminium - ep_on_expansion_aluminium)
+ep_on_replacement_fiberglass = pd.DataFrame(ep_on_inflow_fiberglass - ep_on_expansion_fiberglass)
+ep_on_replacement_neodymium = pd.DataFrame(ep_on_inflow_neodymium - ep_on_expansion_neodymium)
+ep_on_replacement_dysprosium = pd.DataFrame(ep_on_inflow_dysprosium - ep_on_expansion_dysprosium)
 
-ep_off_repalcement_concrete = ep_off_inflow_concrete - ep_off_expansion_concrete
-ep_off_repalcement_steel = ep_off_inflow_steel - ep_off_expansion_steel
-ep_off_repalcement_copper = ep_off_inflow_copper - ep_off_expansion_copper
-ep_off_repalcement_aluminium = ep_off_inflow_aluminium - ep_off_expansion_aluminium
-ep_off_repalcement_fiberglass = ep_off_inflow_fiberglass - ep_off_expansion_fiberglass
-ep_off_repalcement_neodymium = ep_off_inflow_neodymium - ep_off_expansion_neodymium
-ep_off_repalcement_dysprosium = ep_off_inflow_dysprosium - ep_off_expansion_dysprosium
+ep_off_replacement_concrete = pd.DataFrame(ep_off_inflow_concrete - ep_off_expansion_concrete)
+ep_off_replacement_steel = pd.DataFrame(ep_off_inflow_steel - ep_off_expansion_steel)
+ep_off_replacement_copper = pd.DataFrame(ep_off_inflow_copper - ep_off_expansion_copper)
+ep_off_replacement_aluminium = pd.DataFrame(ep_off_inflow_aluminium - ep_off_expansion_aluminium)
+ep_off_replacement_fiberglass = pd.DataFrame(ep_off_inflow_fiberglass - ep_off_expansion_fiberglass)
+ep_off_replacement_neodymium = pd.DataFrame(ep_off_inflow_neodymium - ep_off_expansion_neodymium)
+ep_off_replacement_dysprosium = pd.DataFrame(ep_off_inflow_dysprosium - ep_off_expansion_dysprosium)
+
+# Concat the results together for plotting #
+years = list(range(2021,2051))
+
+sf_on_concrete_flows = pd.concat([sf_on_inflow_concrete, -sf_on_outflow_concrete],ignore_index=True, axis=1)
+sf_on_concrete_flows.columns = ['inflow','outflow']
+sf_on_concrete_flows.index = years
+
+fm_on_concrete_flows = pd.concat([fm_on_inflow_concrete, -fm_on_outflow_concrete],ignore_index=True, axis=1)
+fm_on_concrete_flows.columns = ['inflow','outflow']
+fm_on_concrete_flows.index = years
+
+ep_on_concrete_flows = pd.concat([ep_on_inflow_concrete, -ep_on_outflow_concrete],ignore_index=True, axis=1)
+ep_on_concrete_flows.columns = ['inflow','outflow']
+ep_on_concrete_flows.index = years
+
+sf_on_concrete_exp = pd.concat([sf_on_expansion_concrete, sf_on_replacement_concrete],ignore_index=True, axis=1)
+sf_on_concrete_exp.columns = ['expansion','replacement']
+sf_on_concrete_exp.index = years
+
+fm_on_concrete_exp = pd.concat([fm_on_expansion_concrete, fm_on_replacement_concrete],ignore_index=True, axis=1)
+fm_on_concrete_exp.columns = ['expansion','replacement']
+fm_on_concrete_exp.index = years
+
+ep_on_concrete_exp = pd.concat([ep_on_expansion_concrete, ep_on_replacement_concrete],ignore_index=True, axis=1)
+ep_on_concrete_exp.columns = ['expansion','replacement']
+ep_on_concrete_exp.index = years
+
+sns.set_theme()
+sf_on_concrete_exp.plot(kind='bar', stacked=True)
+plt.show()

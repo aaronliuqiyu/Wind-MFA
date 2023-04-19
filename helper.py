@@ -48,7 +48,7 @@ def stock_driven(stock,lifetime):  # stock is the different type of roads in dif
     out_sc = pd.DataFrame(out_sc, index=np.unique(list(stock.index)))
     out_i = pd.DataFrame(out_i, index=np.unique(list(stock.index)))
 
-    return out_sc, out_oc, out_i
+    return out_oc, out_i
 
 # define a function for calculating the inflow driven stock and outflow
 def inflow_driven_stock(inflow,lifetime):  # stock is the different type of roads in different regions
