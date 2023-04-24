@@ -20,7 +20,7 @@ idx = pd.IndexSlice
 # Set working directory #
 # Change the directory in the bracket to where your data files are located #
 # This does not have to be the same location as the git clone #
-os.chdir("C:\\Users\\qiyu\\OneDrive - Chalmers\\WindMFA") # Change this to local directory# 
+os.chdir("C:\\Users\\qiyu\\OneDrive - Chalmers\\WindMFA") # Change this to your directory# 
 
 # Suppress scientific notation so the output is easier to read #
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
@@ -44,6 +44,14 @@ ep_capacity = pd.read_excel(file_loc, sheet_name='Future capacity', usecols='L:N
 ep_capacity_on = fm_capacity.iloc[:,0] # Onshore ep scenario installed capacity #
 ep_capacity_off = fm_capacity.iloc[:,1] # Offshore ep scenario installed capacity #
 
+# Concat the historical capacity to the interpolated capacities #
+sf_capacity_on = pd.concat([hist_capacity_on,sf_capacity_on], ignore_index=True)
+sf_capacity_off = pd.concat([hist_capacity_on,sf_capacity_off], ignore_index=True)
+fm_capacity_on = pd.concat([hist_capacity_on,fm_capacity_on], ignore_index=True)
+fm_capacity_off = pd.concat([hist_capacity_on,fm_capacity_off], ignore_index=True)
+ep_capacity_on = pd.concat([hist_capacity_on,ep_capacity_on], ignore_index=True)
+ep_capacity_off = pd.concat([hist_capacity_on,ep_capacity_off], ignore_index=True)
+
 # Read in lifetime parameter from excel #
 lifetime = pd.read_excel(file_loc, sheet_name='Lifetime', usecols='A:C', index_col=0)
 
@@ -52,6 +60,9 @@ MI = pd.read_excel(file_loc, sheet_name='Material intensity', index_col=0) # All
 MI_onshore = MI.iloc[:,0]
 MI_offshore = MI.iloc[:,1]
 
+# Read in historical material intensity values #
+MI_on_hist = pd.read_excel(file_loc, sheet_name='MI historical on')
+MI_off_hist = pd.read_excel(file_loc, sheet_name='MI historical off')
 
 # Market share variables for MI #
 MS_on = 0.3 # onshore #
@@ -69,9 +80,15 @@ MI_both = interpolate(material_efficiency,initial_year_value,MS_on,MS_off)
 MI_on = MI_both.loc[[0,2,4,6,8,10,12], :]
 MI_off = MI_both.loc[[1,3,5,7,9,11,13], :]
 
+
+MI_on = pd.concat([MI_on_hist,MI_on.reset_index()], ignore_index=True, axis=1)
+MI_off = pd.concat([MI_off_hist,MI_off.reset_index()], ignore_index=True, axis=1)
+
+
 # Change the row indexes
 MI_on.index = ['Concrete', 'Steel', 'Copper', 'Aluminium', 'Fiber Glass', 'Neodymium', 'Dysprosium']
 MI_off.index = ['Concrete', 'Steel', 'Copper', 'Aluminium', 'Fiber Glass', 'Neodymium', 'Dysprosium']
+
 
 # stock driven #
 from helper import stock_driven
@@ -190,8 +207,6 @@ fm_off_capacity_expansion = fm_capacity_off.diff()
 ep_on_capacity_expansion = ep_capacity_on.diff()
 ep_off_capacity_expansion = ep_capacity_off.diff()
 
-print(sf_on_capacity_expansion)
-
 # Expansion calculated by ODYM #
 sf_on_expansion_concrete = pd.DataFrame(MI_on.iloc[0].values * sf_on_capacity_expansion.values.flatten())
 sf_on_expansion_steel = pd.DataFrame(MI_on.iloc[1].values * sf_on_capacity_expansion.values.flatten())
@@ -291,7 +306,8 @@ ep_off_replacement_neodymium = pd.DataFrame(ep_off_inflow_neodymium - ep_off_exp
 ep_off_replacement_dysprosium = pd.DataFrame(ep_off_inflow_dysprosium - ep_off_expansion_dysprosium)
 
 # Concat the results together for plotting #
-years = list(range(2021,2051))
+# Here I have concated a few scenarios and materials, but you could copy paste and verify other materials #
+years = list(range(1995,2051))
 
 sf_on_concrete_flows = pd.concat([sf_on_inflow_concrete, -sf_on_outflow_concrete],ignore_index=True, axis=1)
 sf_on_concrete_flows.columns = ['inflow','outflow']
@@ -317,6 +333,13 @@ ep_on_concrete_exp = pd.concat([ep_on_expansion_concrete, ep_on_replacement_conc
 ep_on_concrete_exp.columns = ['expansion','replacement']
 ep_on_concrete_exp.index = years
 
+# Change the dataframe name to plot different things#
 sns.set_theme()
-sf_on_concrete_exp.plot(kind='bar', stacked=True)
+ep_on_concrete_flows.plot(kind='bar', stacked=True)
 plt.show()
+
+# This line is the code that could be used to export individual dataframes to excel #
+# You could export multiple dataframe into 1 file, but I am not using that right now for simplicity #
+# Remove the hashtag for exporting #
+
+# sf_on_concrete_exp.to_excel('sf_on_concrete_flows.xlsx')

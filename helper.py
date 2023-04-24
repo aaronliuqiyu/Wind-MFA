@@ -55,12 +55,12 @@ def inflow_driven_stock(inflow,lifetime):  # stock is the different type of road
     shape_list = lifetime.iloc[:, 0]
     scale_list = lifetime.iloc[:, 1]
 
-    DSMforward = DSM(t=list(list(range(2021,2051))), i=np.array(inflow),
+    DSMforward = DSM(t=list(list(range(1995,2051))), i=np.array(inflow),
                      lt={'Type': 'Weibull', 'Shape': np.array(shape_list), 'Scale': np.array(scale_list)})
 
     out_sc = DSMforward.compute_s_c_inflow_driven()
     out_sc = out_sc.sum(axis=1)
-    out_sc = pd.DataFrame(out_sc, index=list(range(2021,2051)))
+    out_sc = pd.DataFrame(out_sc, index=list(range(1995,2051)))
 
     return out_sc
 
